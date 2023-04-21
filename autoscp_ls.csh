@@ -21,11 +21,6 @@ recheck:
 @ ii =1
 while ( $ii <= $ens_size )
   set WORK_DIR = $EXP_DIR_TOP/$ii/
-  if (! -d  $WORK_DIR) then # skip not-exist dir
-    @ ii ++
-    continue
-  endif
-
   cd $WORK_DIR
   echo "--------- WORK_DIR IS NOW: $WORK_DIR ---------"
 

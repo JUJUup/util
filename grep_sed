@@ -1,0 +1,39 @@
+#!/bin/sh
+
+
+# This script grep files with given "STRING", pipe file names to STDIN, and use sed to edit STDIN file.
+# So, we can edit matching STRING to NEW_STRING in any directory/ any file!
+# see more: https://theoryapp.com/searching-and-replacing-with-grep-and-sed/
+
+# Below is an EXAMPLE:
+# grep -rl somematchstring somedir/ | xargs sed -i 's/somematchstring/somereplacestring/g'
+
+orig_str="DART_wrftutorial"
+new_str="DART_test"
+wkd="/scratch/lililei4/haoxing/wrfchem_exps/eastAsia/DART_test/scripts"
+grep_cmd=$(grep -rn --color=always $orig_str $wkd/*.csh*)
+grep_file=$(grep -rl $orig_str $wkd/*.csh*)
+
+echo "$grep_cmd"
+echo -e "$grep_file \n These file(s) will be edited."
+# --color=always will preserve color in grep output.
+# -n will show line number in grep output.
+
+read -p "replace $orig_str by $new_str in $wkd? (y/n)" cmd
+case $cmd in
+    'y')
+        echo "REPLACE START"
+        grep -rl $orig_str $wkd/*.csh* | xargs sed -i "s#$orig_str#$new_str#g"
+	echo "REPLACE END"
+	
+	grep_cmd=$(grep -rn --color=always $new_str $wkd/*.csh*)
+	echo -e "Now replaced file(s) look like: \n $grep_cmd"
+	# sed -i: edit in its orig file. i.e. not redirct to a new textstream.
+	;;
+    'n')
+        echo "NOT REPLACE"
+	;;
+    *)
+        echo "NOT REPLACE"
+	;;
+esac
